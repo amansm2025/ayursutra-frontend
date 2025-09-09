@@ -7,7 +7,7 @@ import { authAPI } from '../services/api';
 const SignUp = () => {
   const navigate = useNavigate();
   const { login } = useAuth();
-  const [userType, setUserType] = useState('patient');
+  const [userType] = useState('patient'); // Only patients can register
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -65,19 +65,14 @@ const SignUp = () => {
         userData.gender = formData.gender;
       }
 
-      if (userType === 'practitioner') {
-        userData.specialization = formData.specialization;
-        userData.experience = parseInt(formData.experience);
-        userData.qualification = formData.license;
-        userData.consultationFee = 1500;
-      }
+
 
       const response = await authAPI.register(userData);
       
       const { token, data } = response.data;
       login(token, data.user);
       
-      navigate(userType === 'patient' ? '/patient' : '/practitioner');
+      navigate('/patient');
     } catch (error) {
       console.error('Registration error:', error);
       console.error('Error response:', error.response);
@@ -118,30 +113,12 @@ const SignUp = () => {
 
         {/* Sign Up Card */}
         <div className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-lg p-6 border border-white/20 animate-slide-up">
-          {/* User Type Toggle */}
-          <div className="flex bg-gray-100 rounded-xl p-1 mb-4">
-            <button
-              type="button"
-              onClick={() => setUserType('patient')}
-              className={`flex-1 py-2 px-3 rounded-lg text-sm font-medium transition-all duration-300 ${
-                userType === 'patient'
-                  ? 'bg-white text-ayur-primary shadow-sm'
-                  : 'text-gray-600 hover:text-ayur-primary'
-              }`}
-            >
-              Patient
-            </button>
-            <button
-              type="button"
-              onClick={() => setUserType('practitioner')}
-              className={`flex-1 py-2 px-3 rounded-lg text-sm font-medium transition-all duration-300 ${
-                userType === 'practitioner'
-                  ? 'bg-white text-ayur-primary shadow-sm'
-                  : 'text-gray-600 hover:text-ayur-primary'
-              }`}
-            >
-              Practitioner
-            </button>
+          {/* Patient Registration Only */}
+          <div className="text-center mb-4">
+            <div className="inline-flex items-center px-4 py-2 bg-ayur-light/30 rounded-xl">
+              <span className="text-sm font-medium text-ayur-primary">Patient Registration</span>
+            </div>
+            <p className="text-xs text-gray-500 mt-1">Practitioners are registered by administrators</p>
           </div>
 
 
@@ -266,40 +243,7 @@ const SignUp = () => {
               </>
             )}
 
-            {/* Practitioner-specific fields */}
-            {userType === 'practitioner' && (
-              <>
-                <input
-                  type="text"
-                  name="specialization"
-                  value={formData.specialization}
-                  onChange={handleChange}
-                  placeholder="Specialization"
-                  required
-                  className="w-full px-3 py-2 bg-gray-50 border-0 rounded-xl focus:ring-2 focus:ring-ayur-primary focus:bg-white transition-all duration-300 text-sm"
-                />
-                <div className="grid grid-cols-2 gap-3">
-                  <input
-                    type="number"
-                    name="experience"
-                    value={formData.experience}
-                    onChange={handleChange}
-                    placeholder="Experience (years)"
-                    required
-                    className="px-3 py-2 bg-gray-50 border-0 rounded-xl focus:ring-2 focus:ring-ayur-primary focus:bg-white transition-all duration-300 text-sm"
-                  />
-                  <input
-                    type="text"
-                    name="license"
-                    value={formData.license}
-                    onChange={handleChange}
-                    placeholder="License Number"
-                    required
-                    className="px-3 py-2 bg-gray-50 border-0 rounded-xl focus:ring-2 focus:ring-ayur-primary focus:bg-white transition-all duration-300 text-sm"
-                  />
-                </div>
-              </>
-            )}
+
 
             <button
               type="submit"
@@ -312,7 +256,7 @@ const SignUp = () => {
                   <span>Creating account...</span>
                 </div>
               ) : (
-                `Create ${userType === 'patient' ? 'Patient' : 'Practitioner'} Account`
+                'Create Patient Account'
               )}
             </button>
           </form>

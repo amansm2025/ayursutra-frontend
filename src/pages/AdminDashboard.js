@@ -38,6 +38,8 @@ const AdminDashboard = () => {
     }
   };
 
+
+
   const handleLogout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
@@ -233,11 +235,8 @@ const AdminDashboard = () => {
         return (
           <div className="space-y-6">
             <div className="flex justify-between items-center">
-              <h3 className="text-xl font-bold text-ayur-primary">Analytics Dashboard</h3>
-              <button 
-                onClick={() => downloadReport('analytics')}
-                className="btn-primary"
-              >
+              <h3 className="text-xl font-bold text-ayur-primary">Real-Time Analytics</h3>
+              <button onClick={() => downloadReport('analytics')} className="btn-primary">
                 📊 Download Report
               </button>
             </div>
@@ -247,15 +246,15 @@ const AdminDashboard = () => {
                 <div className="space-y-4">
                   <div className="flex justify-between">
                     <span>New Patients</span>
-                    <span className="font-semibold">+45 this month</span>
+                    <span className="font-semibold">+{analyticsData?.metrics?.newPatients || 0} this month</span>
                   </div>
                   <div className="flex justify-between">
                     <span>Retention Rate</span>
-                    <span className="font-semibold">87%</span>
+                    <span className="font-semibold">{analyticsData?.metrics?.retentionRate || 0}%</span>
                   </div>
                   <div className="flex justify-between">
                     <span>Avg Sessions</span>
-                    <span className="font-semibold">6.8 per patient</span>
+                    <span className="font-semibold">{analyticsData?.metrics?.avgSessions || 0} per patient</span>
                   </div>
                 </div>
               </Card>
@@ -264,28 +263,28 @@ const AdminDashboard = () => {
                 <div className="space-y-4">
                   <div className="flex justify-between">
                     <span>Avg Rating</span>
-                    <span className="font-semibold">4.8 ⭐</span>
+                    <span className="font-semibold">{analyticsData?.metrics?.avgRating || 0} ⭐</span>
                   </div>
                   <div className="flex justify-between">
                     <span>Utilization</span>
-                    <span className="font-semibold">78%</span>
+                    <span className="font-semibold">{analyticsData?.metrics?.utilization || 0}%</span>
                   </div>
                   <div className="flex justify-between">
                     <span>Revenue/Practitioner</span>
-                    <span className="font-semibold">₹54K</span>
+                    <span className="font-semibold">₹{analyticsData?.metrics?.revenuePerPractitioner || 0}</span>
                   </div>
                 </div>
               </Card>
 
               <Card title="Popular Therapies">
                 <div className="space-y-3">
-                  {['Abhyanga (35%)', 'Shirodhara (28%)', 'Panchakarma (22%)', 'Nasya (15%)'].map((therapy, index) => (
+                  {(analyticsData?.popularTherapies || []).map((therapy, index) => (
                     <div key={index} className="flex justify-between items-center">
-                      <span className="text-sm">{therapy}</span>
+                      <span className="text-sm">{therapy._id} ({therapy.count})</span>
                       <div className="w-16 bg-gray-200 rounded-full h-2">
                         <div 
                           className="bg-ayur-primary h-2 rounded-full"
-                          style={{ width: `${[35, 28, 22, 15][index]}%` }}
+                          style={{ width: `${Math.min(therapy.count * 10, 100)}%` }}
                         ></div>
                       </div>
                     </div>
@@ -293,6 +292,33 @@ const AdminDashboard = () => {
                 </div>
               </Card>
             </div>
+
+            <Card title="Practitioner Performance Details">
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr className="border-b">
+                      <th className="text-left py-2">Name</th>
+                      <th className="text-left py-2">Bookings</th>
+                      <th className="text-left py-2">Rating</th>
+                      <th className="text-left py-2">Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {(analyticsData?.practitionerPerformance || []).map((practitioner, index) => (
+                      <tr key={index} className="border-b">
+                        <td className="py-2">{practitioner.name}</td>
+                        <td className="py-2">{practitioner.bookingCount}</td>
+                        <td className="py-2">{practitioner.rating.toFixed(1)} ⭐</td>
+                        <td className="py-2">
+                          <span className="px-2 py-1 bg-green-100 text-green-800 rounded text-xs">Active</span>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </Card>
           </div>
         );
 
@@ -352,11 +378,8 @@ const AdminDashboard = () => {
         return (
           <div className="space-y-6">
             <div className="flex justify-between items-center">
-              <h3 className="text-xl font-bold text-ayur-primary">Revenue Management</h3>
-              <button 
-                onClick={() => downloadReport('revenue')}
-                className="btn-primary"
-              >
+              <h3 className="text-xl font-bold text-ayur-primary">Real-Time Revenue</h3>
+              <button onClick={() => downloadReport('revenue')} className="btn-primary">
                 💰 Download Revenue Report
               </button>
             </div>
@@ -364,121 +387,72 @@ const AdminDashboard = () => {
             <div className="grid lg:grid-cols-3 gap-6">
               <Card title="Today's Revenue">
                 <div className="text-center">
-                  <p className="text-3xl font-bold text-green-600">₹45,200</p>
-                  <p className="text-sm text-gray-600">+18% from yesterday</p>
+                  <p className="text-3xl font-bold text-green-600">₹{revenueData?.todayRevenue || 0}</p>
+                  <p className="text-sm text-gray-600">Live updates</p>
                 </div>
               </Card>
               <Card title="This Month">
                 <div className="text-center">
-                  <p className="text-3xl font-bold text-blue-600">₹12.4L</p>
-                  <p className="text-sm text-gray-600">+12% from last month</p>
+                  <p className="text-3xl font-bold text-blue-600">₹{revenueData?.monthRevenue || 0}</p>
+                  <p className="text-sm text-gray-600">Monthly total</p>
                 </div>
               </Card>
               <Card title="This Year">
                 <div className="text-center">
-                  <p className="text-3xl font-bold text-purple-600">₹1.2Cr</p>
-                  <p className="text-sm text-gray-600">+25% from last year</p>
+                  <p className="text-3xl font-bold text-purple-600">₹{revenueData?.yearRevenue || 0}</p>
+                  <p className="text-sm text-gray-600">Yearly total</p>
                 </div>
               </Card>
             </div>
 
-            {/* All Transactions Table */}
-            <Card title="All Revenue Transactions">
+            <Card title="Live Revenue Transactions">
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
                   <thead>
-                    <tr className="border-b border-gray-200">
-                      <th className="text-left py-3 px-2 font-medium text-gray-700">Transaction ID</th>
-                      <th className="text-left py-3 px-2 font-medium text-gray-700">Patient</th>
-                      <th className="text-left py-3 px-2 font-medium text-gray-700">Practitioner</th>
-                      <th className="text-left py-3 px-2 font-medium text-gray-700">Therapy</th>
-                      <th className="text-left py-3 px-2 font-medium text-gray-700">Amount</th>
-                      <th className="text-left py-3 px-2 font-medium text-gray-700">Payment Method</th>
-                      <th className="text-left py-3 px-2 font-medium text-gray-700">Date & Time</th>
-                      <th className="text-left py-3 px-2 font-medium text-gray-700">Status</th>
-                      <th className="text-left py-3 px-2 font-medium text-gray-700">Commission</th>
-                      <th className="text-left py-3 px-2 font-medium text-gray-700">Net Revenue</th>
+                    <tr className="border-b">
+                      <th className="text-left py-2">ID</th>
+                      <th className="text-left py-2">Patient</th>
+                      <th className="text-left py-2">Practitioner</th>
+                      <th className="text-left py-2">Therapy</th>
+                      <th className="text-left py-2">Amount</th>
+                      <th className="text-left py-2">Method</th>
+                      <th className="text-left py-2">Date</th>
+                      <th className="text-left py-2">Status</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {ADMIN_STATS.recentTransactions.map((transaction) => {
-                      const commission = Math.round(transaction.amount * 0.15);
-                      const netRevenue = transaction.amount - commission;
-                      return (
-                        <tr key={transaction.id} className="border-b border-gray-100 hover:bg-gray-50">
-                          <td className="py-3 px-2">
-                            <div>
-                              <p className="font-medium text-ayur-primary">{transaction.id}</p>
-                              <p className="text-xs text-gray-500">{transaction.transactionId}</p>
-                            </div>
-                          </td>
-                          <td className="py-3 px-2">
-                            <p className="font-medium">{transaction.patient}</p>
-                          </td>
-                          <td className="py-3 px-2">
-                            <p className="text-gray-700">{transaction.practitioner}</p>
-                          </td>
-                          <td className="py-3 px-2">
-                            <span className="px-2 py-1 bg-ayur-light text-ayur-primary rounded-full text-xs">
-                              {transaction.therapy}
-                            </span>
-                          </td>
-                          <td className="py-3 px-2">
-                            <p className="font-semibold text-gray-800">₹{transaction.amount}</p>
-                          </td>
-                          <td className="py-3 px-2">
-                            <span className={`px-2 py-1 rounded-full text-xs ${
-                              transaction.paymentMethod === 'UPI' ? 'bg-blue-100 text-blue-700' :
-                              transaction.paymentMethod === 'Card' ? 'bg-purple-100 text-purple-700' :
-                              'bg-gray-100 text-gray-700'
-                            }`}>
-                              {transaction.paymentMethod}
-                            </span>
-                          </td>
-                          <td className="py-3 px-2">
-                            <div>
-                              <p className="text-gray-700">{transaction.date}</p>
-                              <p className="text-xs text-gray-500">{transaction.time}</p>
-                            </div>
-                          </td>
-                          <td className="py-3 px-2">
-                            <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                              transaction.status === 'completed' ? 'bg-green-100 text-green-700' :
-                              transaction.status === 'pending' ? 'bg-yellow-100 text-yellow-700' :
-                              transaction.status === 'processing' ? 'bg-blue-100 text-blue-700' :
-                              'bg-red-100 text-red-700'
-                            }`}>
-                              {transaction.status}
-                            </span>
-                          </td>
-                          <td className="py-3 px-2">
-                            <p className="text-sm text-orange-600">₹{commission}</p>
-                            <p className="text-xs text-gray-500">15%</p>
-                          </td>
-                          <td className="py-3 px-2">
-                            <p className="font-semibold text-green-600">₹{netRevenue}</p>
-                          </td>
-                        </tr>
-                      );
-                    })}
+                    {(revenueData?.transactions || []).map((transaction) => (
+                      <tr key={transaction.id} className="border-b hover:bg-gray-50">
+                        <td className="py-2">{transaction.id}</td>
+                        <td className="py-2">{transaction.patient}</td>
+                        <td className="py-2">{transaction.practitioner}</td>
+                        <td className="py-2">
+                          <span className="px-2 py-1 bg-ayur-light text-ayur-primary rounded text-xs">
+                            {transaction.therapy}
+                          </span>
+                        </td>
+                        <td className="py-2 font-semibold">₹{transaction.amount}</td>
+                        <td className="py-2">
+                          <span className={`px-2 py-1 rounded text-xs ${
+                            transaction.paymentMethod === 'UPI' ? 'bg-blue-100 text-blue-700' :
+                            'bg-purple-100 text-purple-700'
+                          }`}>
+                            {transaction.paymentMethod}
+                          </span>
+                        </td>
+                        <td className="py-2">{transaction.date}</td>
+                        <td className="py-2">
+                          <span className={`px-2 py-1 rounded text-xs ${
+                            transaction.status === 'completed' ? 'bg-green-100 text-green-700' :
+                            'bg-yellow-100 text-yellow-700'
+                          }`}>
+                            {transaction.status}
+                          </span>
+                        </td>
+                      </tr>
+                    ))}
                   </tbody>
                 </table>
-              </div>
-              <div className="mt-4 flex justify-between items-center">
-                <div className="flex space-x-4 text-sm text-gray-600">
-                  <span>Total Transactions: 156</span>
-                  <span>Total Revenue: ₹24.5L</span>
-                  <span>Total Commission: ₹3.7L</span>
-                  <span>Net Revenue: ₹20.8L</span>
-                </div>
-                <div className="flex space-x-2">
-                  <button className="px-3 py-1 bg-gray-100 text-gray-600 rounded text-sm hover:bg-gray-200">
-                    Previous
-                  </button>
-                  <button className="px-3 py-1 bg-ayur-primary text-white rounded text-sm hover:bg-ayur-secondary">
-                    Next
-                  </button>
-                </div>
               </div>
             </Card>
           </div>
@@ -518,15 +492,31 @@ const AdminDashboard = () => {
       case 'system':
         return (
           <div className="space-y-6">
-            <h3 className="text-xl font-bold text-ayur-primary">System Monitoring</h3>
+            <h3 className="text-xl font-bold text-ayur-primary">Real-Time System Monitoring</h3>
             
-            <Card title="System Logs">
+            <Card title="System Health">
+              <div className="space-y-4">
+                {(systemData?.systemHealth || []).map((health, index) => (
+                  <div key={index} className="flex justify-between items-center">
+                    <span className="text-gray-700">{health.metric}</span>
+                    <div className="flex items-center space-x-2">
+                      <span className="font-semibold">{health.value}</span>
+                      <span className={`px-2 py-1 rounded-full text-xs ${getStatusColor(health.status)}`}>
+                        {health.status}
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </Card>
+
+            <Card title="Live System Logs">
               <div className="space-y-3">
-                {ADMIN_STATS.systemLogs.map((log) => (
+                {(systemData?.systemLogs || []).map((log) => (
                   <div key={log.id} className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
                     <div>
                       <p className="font-medium">{log.message}</p>
-                      <p className="text-sm text-gray-600">{log.timestamp}</p>
+                      <p className="text-sm text-gray-600">{new Date(log.timestamp).toLocaleString()}</p>
                     </div>
                     <span className={`px-2 py-1 rounded-full text-xs ${getSeverityColor(log.severity)}`}>
                       {log.severity}

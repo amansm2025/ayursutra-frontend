@@ -10,7 +10,7 @@ import SignUp from './pages/SignUp';
 import Pricing from './pages/Pricing';
 import PatientDashboard from './pages/PatientDashboard';
 import PractitionerDashboard from './pages/PractitionerDashboard';
-import PractitionerSignup from './pages/PractitionerSignup';
+
 import AdminDashboard from './pages/AdminDashboard';
 import Booking from './pages/Booking';
 import Feedback from './pages/Feedback';
@@ -39,7 +39,7 @@ function App() {
                 <PractitionerDashboard />
               </ProtectedRoute>
             } />
-            <Route path="/practitioner/signup" element={<PractitionerSignup />} />
+
             <Route path="/admin" element={
               <ProtectedRoute requiredRole="admin">
                 <AdminDashboard />
