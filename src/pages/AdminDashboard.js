@@ -12,11 +12,30 @@ const AdminDashboard = () => {
   const [dashboardData, setDashboardData] = useState(null);
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [analyticsData, setAnalyticsData] = useState(null);
+  const [revenueData, setRevenueData] = useState(null);
+  const [systemData, setSystemData] = useState(null);
 
   useEffect(() => {
     fetchDashboardData();
     fetchUsers();
   }, []);
+
+  useEffect(() => {
+    switch (activeItem) {
+      case 'analytics':
+        if (!analyticsData) fetchAnalyticsData();
+        break;
+      case 'revenue':
+        if (!revenueData) fetchRevenueData();
+        break;
+      case 'system':
+        if (!systemData) fetchSystemData();
+        break;
+      default:
+        break;
+    }
+  }, [activeItem, analyticsData, revenueData, systemData]);
 
   const fetchDashboardData = async () => {
     try {
@@ -35,6 +54,36 @@ const AdminDashboard = () => {
       setUsers(response.data.data.users);
     } catch (error) {
       console.error('Error fetching users:', error);
+    }
+  };
+
+  const fetchAnalyticsData = async () => {
+    try {
+      const response = await api.get('/admin/analytics');
+      setAnalyticsData(response.data.data);
+    } catch (error) {
+      console.error('Error fetching analytics data:', error);
+      setAnalyticsData({ metrics: {}, popularTherapies: [], practitionerPerformance: [] });
+    }
+  };
+
+  const fetchRevenueData = async () => {
+    try {
+      const response = await api.get('/admin/revenue');
+      setRevenueData(response.data.data);
+    } catch (error) {
+      console.error('Error fetching revenue data:', error);
+      setRevenueData({ todayRevenue: 0, monthRevenue: 0, yearRevenue: 0, transactions: [] });
+    }
+  };
+
+  const fetchSystemData = async () => {
+    try {
+      const response = await api.get('/admin/system');
+      setSystemData(response.data.data);
+    } catch (error) {
+      console.error('Error fetching system data:', error);
+      setSystemData({ systemHealth: [], systemLogs: [] });
     }
   };
 
