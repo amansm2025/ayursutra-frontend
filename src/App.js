@@ -62,6 +62,9 @@ function App() {
               </ProtectedRoute>
             } />
           </Routes>
+          <footer className="fixed bottom-2 right-2 text-xs text-gray-500 bg-white px-2 py-1 rounded shadow">
+            HealPoint v1.0.0 - {new Date().getFullYear()}
+          </footer>
         </div>
       </Router>
     </AuthProvider>
