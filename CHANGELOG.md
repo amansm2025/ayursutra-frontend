@@ -25,3 +25,5 @@
 - Chart.js integration for analytics
 - Optimized build process
 - Environment configuration support
+
+<!-- details for next feature plan -->
