@@ -1,6 +1,6 @@
-# AyurSutra Frontend
+# HealPoint Frontend
 
-Frontend React application for the AyurSutra Panchakarma Patient Management System.
+Frontend React application for the HealPoint Online Patient Management System.
 
 ## 🚀 Quick Start
 

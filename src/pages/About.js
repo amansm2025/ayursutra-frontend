@@ -9,7 +9,7 @@ const About = () => {
       role: 'Chief Ayurvedic Practitioner',
       experience: '15+ years',
       photo: '👩‍⚕️',
-      description: 'Expert in Panchakarma and traditional healing methods'
+      description: 'Expert in online consultations and traditional healing methods'
     },
     {
       name: 'Dr. Rajesh Patel',
@@ -59,7 +59,7 @@ const About = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center animate-fade-in">
             <h1 className="text-4xl md:text-5xl font-bold text-ayur-primary mb-6">
-              About AyurSutra
+              About HealPoint
             </h1>
             <p className="text-xl text-gray-700 max-w-3xl mx-auto mb-8">
               Bridging 5000 years of Ayurvedic wisdom with cutting-edge technology to create 

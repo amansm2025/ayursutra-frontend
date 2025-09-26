@@ -4,9 +4,9 @@ export const TIME_SLOTS = [
 ];
 
 export const LOGO_CONFIG = {
-  icon: '🌿',
-  name: 'AyurSutra',
-  tagline: 'Ancient Wisdom, Modern Care'
+  icon: '🏥',
+  name: 'HealPoint',
+  tagline: 'Your Health, Our Priority'
 };
 
 export const NAVIGATION_ITEMS = {
@@ -63,16 +63,16 @@ export const PRICING_DATA = {
     },
     benefits: ['Calms mind', 'Improves sleep', 'Reduces anxiety']
   },
-  Panchakarma: {
-    name: 'Panchakarma',
-    description: 'Complete detoxification and rejuvenation program',
-    icon: '🔄',
+  OnlineConsultation: {
+    name: 'Online Consultation',
+    description: 'Complete online consultation and guidance program',
+    icon: '💻',
     durations: {
-      120: { price: 350, popular: false },
-      180: { price: 500, popular: true },
-      240: { price: 650, popular: false }
+      30: { price: 150, popular: false },
+      60: { price: 250, popular: true },
+      90: { price: 350, popular: false }
     },
-    benefits: ['Deep detox', 'Rejuvenation', 'Balances doshas']
+    benefits: ['Expert guidance', 'Personalized care', 'Convenient access']
   },
   Nasya: {
     name: 'Nasya',
@@ -105,7 +105,7 @@ export const PRACTITIONERS_DATA = [
     id: 1,
     name: 'Dr. Priya Sharma',
     experience: '15 years',
-    specialization: 'Panchakarma & Abhyanga',
+    specialization: 'Online Consultation & Abhyanga',
     rating: 4.9,
     photo: '👩‍⚕️',
     description: 'Expert in traditional Ayurvedic treatments with focus on detoxification',
@@ -125,7 +125,7 @@ export const PRACTITIONERS_DATA = [
     id: 3,
     name: 'Dr. Meera Singh',
     experience: '18 years',
-    specialization: 'Basti & Panchakarma',
+    specialization: 'Basti & Online Consultation',
     rating: 4.9,
     photo: '👩‍⚕️',
     description: 'Senior practitioner with expertise in complete detox programs',
@@ -149,7 +149,7 @@ export const ADMIN_STATS = {
   recentTransactions: [
     { id: 'TXN001', patient: 'John Doe', practitioner: 'Dr. Priya Sharma', amount: 4500, therapy: 'Abhyanga', date: '2024-01-15', time: '10:30 AM', status: 'completed', paymentMethod: 'UPI', transactionId: 'UPI2024011501' },
     { id: 'TXN002', patient: 'Jane Smith', practitioner: 'Dr. Rajesh Patel', amount: 5500, therapy: 'Shirodhara', date: '2024-01-15', time: '02:15 PM', status: 'completed', paymentMethod: 'Card', transactionId: 'CARD2024011502' },
-    { id: 'TXN003', patient: 'Mike Johnson', practitioner: 'Dr. Meera Singh', amount: 18000, therapy: 'Panchakarma', date: '2024-01-14', time: '11:00 AM', status: 'pending', paymentMethod: 'UPI', transactionId: 'UPI2024011403' },
+    { id: 'TXN003', patient: 'Mike Johnson', practitioner: 'Dr. Meera Singh', amount: 18000, therapy: 'Online Consultation', date: '2024-01-14', time: '11:00 AM', status: 'pending', paymentMethod: 'UPI', transactionId: 'UPI2024011403' },
     { id: 'TXN004', patient: 'Sarah Wilson', practitioner: 'Dr. Priya Sharma', amount: 2800, therapy: 'Nasya', date: '2024-01-15', time: '04:45 PM', status: 'failed', paymentMethod: 'Card', transactionId: 'CARD2024011504' },
     { id: 'TXN005', patient: 'David Brown', practitioner: 'Dr. Rajesh Patel', amount: 6000, therapy: 'Basti', date: '2024-01-15', time: '09:20 AM', status: 'completed', paymentMethod: 'Cash', transactionId: 'CASH2024011505' },
     { id: 'TXN006', patient: 'Lisa Garcia', practitioner: 'Dr. Meera Singh', amount: 4500, therapy: 'Abhyanga', date: '2024-01-15', time: '03:30 PM', status: 'processing', paymentMethod: 'UPI', transactionId: 'UPI2024011506' }
@@ -189,7 +189,7 @@ export const DUMMY_DATA = {
         'Sleep disorders'
       ],
       currentTreatment: {
-        plan: 'Panchakarma Detox Program',
+        plan: 'Online Wellness Program',
         startDate: '2024-01-01',
         duration: '21 days',
         progress: '65%',

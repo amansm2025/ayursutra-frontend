@@ -47,7 +47,7 @@ const Booking = () => {
         { 
           _id: '1', 
           name: 'Dr. Priya Sharma', 
-          specialization: 'Panchakarma Specialist',
+          specialization: 'Online Consultation Specialist',
           experience: '15 years',
           consultationFee: 1500
         }
@@ -69,7 +69,7 @@ const Booking = () => {
       setTherapies([
         { name: 'Abhyanga', price: 2500, description: 'Full body oil massage' },
         { name: 'Shirodhara', price: 3000, description: 'Oil pouring therapy' },
-        { name: 'Panchakarma', price: 5000, description: 'Complete detox program' }
+        { name: 'Online Consultation', price: 2500, description: 'Complete online consultation' }
       ]);
     }
   };
